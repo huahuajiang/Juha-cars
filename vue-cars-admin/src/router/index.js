@@ -63,6 +63,56 @@ const routes = [
       },
     ],
   },
+  //车辆品牌
+  {
+    path: "/carsBrand",
+    name: "CarsBrand",
+    meta: {
+      title: "车辆品牌",
+      icon: "console",
+      iconClass: "icon_console",
+    },
+    component: Layout,
+    children: [
+      {
+        path: "/carsBrandIndex",
+        name: "CarsBrandIndex",
+        meta: {
+          title: "品牌列表",
+        },
+        component: () => import("../views/carsBrand/index.vue"),
+      }
+    ],
+  },
+  //车辆管理
+  {
+    path: "/cars",
+    name: "Cars",
+    meta: {
+      title: "车辆管理",
+      icon: "console",
+      iconClass: "icon_console",
+    },
+    component: Layout,
+    children: [
+      {
+        path: "/carsIndex",
+        name: "CarsIndex",
+        meta: {
+          title: "车辆列表",
+        },
+        component: () => import("../views/Cars/index.vue"),
+      },
+      {
+        path: "/carsAdd",
+        name: "CarsAdd",
+        meta: {
+          title: "新增车辆",
+        },
+        component: () => import("../views/Cars/add.vue"),
+      }
+    ],
+  },
 ];
 
 const router = new VueRouter({

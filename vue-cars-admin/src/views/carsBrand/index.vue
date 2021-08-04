@@ -3,36 +3,27 @@
     <div class="filter-form">
       <el-row>
         <el-col :span="18">
-          <el-form :inline="true" :model="form" class="demo-form-inline">
-            <el-form-item label="停车场名称">
+          <el-form :inline="true" :model="form" class="demo-form-inline" label-width="100px">
+            <el-form-item label="车辆品牌：">
+              <el-select v-model="form.area" placeholder="选择品牌">
+                <el-option label="福特" value="1"></el-option>
+                <el-option label="红旗" value="2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="品牌型号：">
               <el-input
                 v-model="form.parking_name"
                 placeholder="审批人"
               ></el-input>
             </el-form-item>
-            <el-form-item label="区域">
-              <el-cascader
-                v-model="form.area"
-                :options="options"
-                :props="{ expandTrigger: 'hover' }"
-              ></el-cascader>
-            </el-form-item>
-            <el-form-item label="类型">
-              <el-select v-model="form.area" placeholder="活动区域">
-                <el-option label="室内" value="1"></el-option>
-                <el-option label="室外" value="2"></el-option>
-              </el-select>
-            </el-form-item>
             <el-form-item>
-              <el-button type="danger" @click="onSubmit">搜索</el-button>
+              <el-button type="danger">搜索</el-button>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="6">
-          <div class="pull-right">
-            <router-link to="/parkingAdd">
-              <el-button type="danger">新增停车场</el-button>
-            </router-link>
+          <div class="pull-right">  
+              <el-button type="danger" @click="dialog_show=true">新增车辆品牌</el-button>
           </div>
         </el-col>
       </el-row>
@@ -40,10 +31,9 @@
     <!--表格数据-->
     <el-table :data="tableData" border style="width:100%">
       <el-table-column type="selection" width="35"></el-table-column>
-      <el-table-column prop="name" label="停车场名称"></el-table-column>
-      <el-table-column prop="type" label="类型"></el-table-column>
-      <el-table-column prop="area" label="区域"></el-table-column>
-      <el-table-column prop="carsNumber" label="可停放车辆"></el-table-column>
+      <el-table-column prop="name" label="LOGO"></el-table-column>
+      <el-table-column prop="type" label="车辆品牌"></el-table-column>
+      <el-table-column prop="area" label="品牌型号"></el-table-column>
       <el-table-column prop="disabled" label="禁启用">
         <template slot-scope="scope">
           <el-switch
@@ -53,7 +43,6 @@
           ></el-switch>
         </template>
       </el-table-column>
-      <el-table-column prop="address" label="查看位置"></el-table-column>
       <el-table-column label="操作">
         <template><!--slot-scope="scope"-->
           <el-button type="danger" size="small">编辑</el-button>
@@ -61,25 +50,23 @@
         </template>
       </el-table-column>
     </el-table>
+    <AddCarsBand :flagVisible.sync="dialog_show"/>
   </div>
 </template>
 <script>
+import AddCarsBand from "@c/dialog/addCarsBrand"
 export default {
   name: "Parking",
+  components:{AddCarsBand},
   data() {
     return {
+      //弹窗标记
+      dialog_show:false,
       form: {
         parking_name: "",
         area: "",
         type: "",
       },
-      options: [
-        {
-          value: 1111,
-          label: "广东省",
-          children: [{ value: 111, label: "深圳市" }],
-        },
-      ],
       tableData: [
         {
           name: "南山停车场",
