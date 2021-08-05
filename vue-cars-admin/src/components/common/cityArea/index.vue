@@ -1,0 +1,78 @@
+<template>
+    <el-cascader
+          v-model="value"
+          :options="cascader_options"
+          :props="cascader_props"
+          @change="changeVaule"
+        ></el-cascader>
+</template>
+<script>
+import {GetCity} from "@/api/common";
+export default {
+    data(){
+        return{
+            value:"",
+            cascader_options:[],
+            cascader_props:{
+                lazy:true,
+                lazyLoad(node,resolve){
+                console.log(node)
+                const level=node.level;
+                //请求参数
+                const requestData={};
+                //省份
+                if(level===0){
+                    requestData.type="province";
+                }
+                //城市
+                if(level===1){
+                    requestData.type="city";
+                    requestData.province_code=node.value;
+                }
+                //区
+                if(level==2){
+                    requestData.type="area";
+                    requestData.city_code=node.value;
+                }
+                //省市区的接口
+                GetCity(requestData).then(resonse=>{
+                    const data=resonse.data.data;
+                    if(level===0){
+                    data.forEach(item=>{
+                        item.value=item.PROVINCE_CODE;
+                        item.label=item.PROVINCE_NAME;
+                    })
+                    }
+                    if(level===1){
+                    data.forEach(item=>{
+                        item.value=item.CITY_CODE;
+                        item.label=item.CITY_NAME;
+                    })
+                    }
+                    if(level===2){
+                    data.forEach(item=>{
+                        item.value=item.AREA_CODE;
+                        item.label=item.AREA_NAME;
+                        item.leaf=level>=2;
+                    })
+                    }
+                    //返回节点数据
+                    resolve(resonse.data.data);
+                })
+                }
+            }
+        }
+    },
+    methods:{
+        changeVaule(value){
+            this.$emit("update:cityAreaValue",value.join())
+        }
+    },
+    props:{
+        cityAreaValue:{
+            type:String,
+            default:""
+        }
+    }
+}
+</script>
