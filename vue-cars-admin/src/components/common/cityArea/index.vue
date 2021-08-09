@@ -20,42 +20,29 @@ export default {
                 const level=node.level;
                 //请求参数
                 const requestData={};
-                //省份
-                if(level===0){
-                    requestData.type="province";
+
+                const jsonType={
+                    0:{type:"province"},
+                    1:{type:"city",code:"province"},
+                    2:{type:"area",code:"city"}
                 }
-                //城市
-                if(level===1){
-                    requestData.type="city";
-                    requestData.province_code=node.value;
+                if(jsonType[level].code){
+                    requestData[`${jsonType[level].code}_code`]=node.value
                 }
-                //区
-                if(level==2){
-                    requestData.type="area";
-                    requestData.city_code=node.value;
-                }
+                //type
+                requestData.type=jsonType[level].type;
                 //省市区的接口
                 GetCity(requestData).then(resonse=>{
                     const data=resonse.data.data;
-                    if(level===0){
+                    //类型
+                    const type=jsonType[level].type.toUpperCase();
+                    //自定义value、label
                     data.forEach(item=>{
-                        item.value=item.PROVINCE_CODE;
-                        item.label=item.PROVINCE_NAME;
+                        item.value=item[`${type}_CODE`];
+                        item.label=item[`${type}_NAME`];
+                        //最后一层选择
+                        if(level===2){item.leaf=level>=2;}
                     })
-                    }
-                    if(level===1){
-                    data.forEach(item=>{
-                        item.value=item.CITY_CODE;
-                        item.label=item.CITY_NAME;
-                    })
-                    }
-                    if(level===2){
-                    data.forEach(item=>{
-                        item.value=item.AREA_CODE;
-                        item.label=item.AREA_NAME;
-                        item.leaf=level>=2;
-                    })
-                    }
                     //返回节点数据
                     resolve(resonse.data.data);
                 })

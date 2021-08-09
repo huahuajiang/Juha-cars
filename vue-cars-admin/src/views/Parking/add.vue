@@ -24,11 +24,11 @@
       </el-form-item>
       <el-form-item label="位置">
         <div class="address-map">
-          <AMap/>
+          <AMap @lonlag="aaa"/>
         </div>
       </el-form-item>
       <el-form-item label="经纬度">
-        <el-input v-model="form.desc"></el-input>
+        <el-input v-model="form.lonlag"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="danger" @click="onSubmit()">确定</el-button>
@@ -47,13 +47,17 @@ export default {
         area:"",
         name: "",
         resource: "",
-        desc: "",
+        lonlag: "",
       },
       
     };
   },
   components:{AMap,CityArea},
   methods:{
+    aaa(data){
+      console.log(data);
+      this.form.lonlag=data.value;
+    },
     onSubmit(){
       console.log(this.form.area)
     }
