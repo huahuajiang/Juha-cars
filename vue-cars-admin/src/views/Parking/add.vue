@@ -5,7 +5,7 @@
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="区域">
-        <CityArea  :cityAreaValue.sync="form.area"/>
+        <CityArea :mapLocation="true"  :cityAreaValue.sync="form.area" @callback="callbackComponent"/>
       </el-form-item>
       <el-form-item label="类型">
         <el-radio-group v-model="form.resource">
@@ -24,7 +24,7 @@
       </el-form-item>
       <el-form-item label="位置">
         <div class="address-map">
-          <AMap @lonlag="aaa"/>
+          <AMap ref="amap" @lonlag="aaa"/>
         </div>
       </el-form-item>
       <el-form-item label="经纬度">
@@ -57,6 +57,12 @@ export default {
     aaa(data){
       console.log(data);
       this.form.lonlag=data.value;
+    },
+    callbackComponent(params){
+      if(params.function){this[params.function](params.data);}
+    },
+    setMapCenter(data){
+      this.$refs.amap.setMapCenter(data.address);
     },
     onSubmit(){
       console.log(this.form.area)

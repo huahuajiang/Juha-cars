@@ -7,6 +7,7 @@
 import { AMapManager,lazyAMapApiLoaderInstance } from 'vue-amap';
 //方法
 import {getLonLag} from "./common";
+import {addressSetMapCenter} from "./location";
 export default{
     name:"Amap",
     data(){
@@ -28,6 +29,11 @@ export default{
                 _this.$emit("lonlag",lonlag);
             })
         })
+    },
+    methods:{
+        setMapCenter(value){
+            addressSetMapCenter(value,this.map);
+        }
     }
 }
 </script>
